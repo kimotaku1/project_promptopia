@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import Form from "@components/Form";
 
 const UpdatePrompt = () => {
@@ -12,7 +11,7 @@ const UpdatePrompt = () => {
 
   const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getPromptDetails = async () => {
@@ -29,7 +28,7 @@ const UpdatePrompt = () => {
       } catch (error) {
         console.error("Error fetching prompt details:", error);
       } finally {
-        setLoading(false); // Stop loading once data is fetched
+        setLoading(false);
       }
     };
 
@@ -63,7 +62,7 @@ const UpdatePrompt = () => {
   };
 
   if (loading) {
-    return <div>Loading prompt details...</div>; // Render loading state
+    return <div>Loading prompt details...</div>;
   }
 
   return (
@@ -77,4 +76,11 @@ const UpdatePrompt = () => {
   );
 };
 
-export default UpdatePrompt;
+// Wrap the component in a Suspense boundary in the page component
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UpdatePrompt />
+    </Suspense>
+  );
+}
